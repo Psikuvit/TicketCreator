@@ -1,0 +1,7 @@
+name: BetterParticles
+version: '1.0'
+main: psikuvit.betterparticles.Main
+api-version: 1.13
+
+commands:
+    sparticles:
