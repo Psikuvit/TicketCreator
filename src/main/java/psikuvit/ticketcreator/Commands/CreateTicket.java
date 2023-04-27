@@ -13,7 +13,9 @@ public class CreateTicket implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (sender instanceof Player p) {
-            if (!TicketManager.check(p)) {
+            if (!TicketManager.checkOpener(p)) {
+                TicketManager.createTicket(p);
+                TicketManager.getPlayerChat().put(p, true);
                 p.sendMessage(Utils.color("&cYou have a running ticket"));
                 return true;
             }

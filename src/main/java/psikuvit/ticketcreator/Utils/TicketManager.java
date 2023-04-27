@@ -1,21 +1,33 @@
 package psikuvit.ticketcreator.Utils;
 
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.bukkit.entity.Player;
 import psikuvit.ticketcreator.Main;
 import psikuvit.ticketcreator.Ticket;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class TicketManager {
 
     static Main plugin = Main.getPlugin();
     static List<Ticket> ticketList = new ArrayList<>();
+    static HashMap<Player, Boolean> playerChat = new HashMap<>();
 
-    public static Ticket findByID(String id) {
+    public static Ticket findByID(TextChannel id) {
         for (Ticket ticket : getTicketList()) {
-            if (ticket.getTicketID().equalsIgnoreCase(id)) {
+            if (ticket.getTicketID().equalsIgnoreCase(id.getName())) {
+                return ticket;
+            }
+        }
+        return null;
+    }
+
+    public static Ticket findByPlayer(Player p) {
+        for (Ticket ticket : getTicketList()) {
+            if (ticket.getTicketOpener() == p.getUniqueId()) {
                 return ticket;
             }
         }
@@ -32,7 +44,7 @@ public class TicketManager {
     public static void createTicket(Player p) {
         Guild guild = JDAMethods.getGuild(plugin.getConfig().getString("Guild"));
         String id = "ticket-" + p.getDisplayName();
-        guild.createTextChannel(id).queue();
+        guild.createTextChannel(id).setName(id).queue();
         Ticket ticket = new Ticket(p.getUniqueId(), id);
         TicketManager.addTicket(ticket);
     }
@@ -40,10 +52,13 @@ public class TicketManager {
     public static List<Ticket> getTicketList() {
         return ticketList;
     }
-    public static boolean check(Player player) {
+    public static boolean checkOpener(Player player) {
         for (Ticket ticket : getTicketList()) {
             return ticket.getTicketOpener() == player.getUniqueId();
         }
         return false;
+    }
+    public static HashMap<Player, Boolean> getPlayerChat() {
+        return playerChat;
     }
 }
