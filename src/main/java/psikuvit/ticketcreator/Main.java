@@ -15,7 +15,7 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         plugin = this;
-        jda = JDABuilder.createDefault("MTEwMDg3ODY2ODkzMjMyOTQ3Mg.GN9YEZ.JqyuuysQixnPl8VQCDGrnMsRBg68vjNuNgKcq0")
+        jda = JDABuilder.createDefault(getConfig().getString("BotToken"))
                 .addEventListeners(new DiscordEvents())
                 .build();
 
