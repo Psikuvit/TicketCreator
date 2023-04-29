@@ -9,6 +9,7 @@ import psikuvit.ticketcreator.Ticket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class TicketManager {
 
@@ -18,7 +19,7 @@ public class TicketManager {
 
     public static Ticket findByID(TextChannel id) {
         for (Ticket ticket : getTicketList()) {
-            if (ticket.getTicketID().equalsIgnoreCase(id.getName())) {
+            if (ticket.getTicketID().equalsIgnoreCase(id.getId())) {
                 return ticket;
             }
         }
@@ -42,11 +43,17 @@ public class TicketManager {
     }
 
     public static void createTicket(Player p) {
-        Guild guild = JDAMethods.getGuild(plugin.getConfig().getString("Guild"));
+        Guild guild = JDAMethods.getGuild();
         String id = "ticket-" + p.getDisplayName();
         guild.createTextChannel(id).setName(id).queue();
-        Ticket ticket = new Ticket(p.getUniqueId(), id);
+
+        TextChannel textChannel = JDAMethods.getTextChannelByName(id);
+        if (textChannel == null) {
+            return;
+        }
+        Ticket ticket = new Ticket(p.getUniqueId(), textChannel.getId());
         TicketManager.addTicket(ticket);
+        p.sendMessage(Utils.color("&bticket with ID: " + ticket.getTicketID() + " &bwas created"));
     }
 
     public static List<Ticket> getTicketList() {

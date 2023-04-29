@@ -1,11 +1,9 @@
 package psikuvit.ticketcreator.Commands;
 
-import net.dv8tion.jda.api.entities.Guild;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import psikuvit.ticketcreator.Main;
 import psikuvit.ticketcreator.Utils.TicketManager;
 import psikuvit.ticketcreator.Utils.Utils;
 
@@ -16,6 +14,7 @@ public class CreateTicket implements CommandExecutor {
             if (!TicketManager.checkOpener(p)) {
                 TicketManager.createTicket(p);
                 TicketManager.getPlayerChat().put(p, true);
+            } else {
                 p.sendMessage(Utils.color("&cYou have a running ticket"));
                 return true;
             }

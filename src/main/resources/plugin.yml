@@ -2,3 +2,7 @@ name: TicketCreator
 version: '${project.version}'
 main: psikuvit.ticketcreator.Main
 api-version: 1.13
+
+commands:
+  tickettoggle:
+  ticket:

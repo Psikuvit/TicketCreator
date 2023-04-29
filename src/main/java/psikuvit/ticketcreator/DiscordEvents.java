@@ -8,9 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import psikuvit.ticketcreator.Utils.JDAMethods;
 import psikuvit.ticketcreator.Utils.TicketManager;
-
-import java.util.UUID;
 
 public class DiscordEvents extends ListenerAdapter implements Listener {
 
@@ -21,7 +20,7 @@ public class DiscordEvents extends ListenerAdapter implements Listener {
             if (TicketManager.getPlayerChat().get(p)) {
                 Ticket ticket = TicketManager.findByPlayer(p);
                 e.setCancelled(true);
-                TextChannel textChannel = Main.getJda().getTextChannelById(ticket.getTicketID());
+                TextChannel textChannel = JDAMethods.getTextChannelByID(ticket.getTicketID());
                 textChannel.sendMessage(e.getMessage()).queue();
 
             }
@@ -30,7 +29,11 @@ public class DiscordEvents extends ListenerAdapter implements Listener {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        Ticket ticket = TicketManager.findByID(event.getChannel().asTextChannel());
+        if (event.getAuthor().isBot()) {
+            return;
+        }
+        TextChannel textChannel = JDAMethods.getTextChannelByID(event.getChannel().asTextChannel().getId());
+        Ticket ticket = TicketManager.findByID(textChannel);
         Player p = Bukkit.getPlayer(ticket.getTicketOpener());
         p.sendMessage(event.getMessage().getContentRaw());
 
