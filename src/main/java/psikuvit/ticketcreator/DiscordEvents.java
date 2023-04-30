@@ -33,9 +33,12 @@ public class DiscordEvents extends ListenerAdapter implements Listener {
             return;
         }
         TextChannel textChannel = JDAMethods.getTextChannelByID(event.getChannel().asTextChannel().getId());
-        Ticket ticket = TicketManager.findByID(textChannel);
-        Player p = Bukkit.getPlayer(ticket.getTicketOpener());
-        p.sendMessage(event.getMessage().getContentRaw());
-
+        if (event.getMessage().getContentRaw().equalsIgnoreCase("ticket delete")) {
+            textChannel.delete().queue();
+        } else {
+            Ticket ticket = TicketManager.findByID(textChannel);
+            Player p = Bukkit.getPlayer(ticket.getTicketOpener());
+            p.sendMessage(event.getMessage().getContentRaw());
+        }
     }
 }

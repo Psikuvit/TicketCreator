@@ -5,8 +5,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Message;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import psikuvit.ticketcreator.Commands.ChatToggle;
-import psikuvit.ticketcreator.Commands.CreateTicket;
+import psikuvit.ticketcreator.Commands.CommandRegisterer;
 
 
 public class Main extends JavaPlugin implements Listener {
@@ -25,8 +24,7 @@ public class Main extends JavaPlugin implements Listener {
         // Register listener for Spigot events
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(new DiscordEvents(), this);
-        getCommand("tickettoggle").setExecutor(new ChatToggle());
-        getCommand("ticket").setExecutor(new CreateTicket());
+        getCommand("ticket").setExecutor(new CommandRegisterer(this));
 
     }
 
